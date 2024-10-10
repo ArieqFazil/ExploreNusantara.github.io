@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Nusantara</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: rgb(255, 255, 255);
+            background-color: rgb(5, 159, 162);
+        }
+        .header {
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+        .favorite-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.favorite-icon.active {
+    color: red;
+}
+
+.favorite-icon i {
+    color: gold;
+    font-size: 18px;
+}
+
+.favorite-icon:hover {
+    transform: scale(1.2);
+}
+#favorites {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        #favorites h2 {
+            color: #333;
+        }
+        #favoritesList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .favorite-item {
+            width: 200px;
+            text-align: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .favorite-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .places {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+        /* Tambahkan CSS untuk search icon */
+        .nav .search-bar {
+            position: relative;
+        }
+        .search-bar {
+    order: 3; /* Menyatakan bahwa search bar berada setelah HOME */
+}
+        .nav .search-bar input {
+            color: black;
+            display: none;
+            position: absolute;
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            padding: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 200px;
+        }
+        .nav .search-bar input.active {
+            display: block;
+        }
+        .nav .search-bar i {
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 20px;
+        }
+
+        .header img {
+            width: 100%;
+            height: auto;
+        }
+        .header .text {
+            position: absolute;
+            top: 20%;
+            left: 18%;
+            transform: translate(-10%, -20%);
+            width: 80%;
+        }
+        .header .text h1 {
+            font-size: 50px;
+            margin: 0;
+        }
+        .header .text p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .header .text .swipe {
+            font-size: 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .slide {
+            height: 60px; /* Set a fixed height for the slide container */
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: rgb(0, 140, 133);
+    }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 0 10px;
+            cursor: pointer;
+            order: 1;
+        }
+        .nav .active {
+            color: rgb(250, 250, 250);
+            text-align: left
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        #home {
+            background-image: url('https://i.pinimg.com/564x/4b/8f/1e/4b8f1eea3a2c000826e95d81d4de2f42.jpg');
+            background-size: 100%;
+            padding-bottom: 2%;
+            padding-top: 2%;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .home-content {
+             padding: 100px;
+            border-radius: 1px;
+        }
+        .home-content h1 {
+            font-size: 50px;
+            margin: 0;
+        }
+        .dropdown {
+        flex-grow: 1; /* Mengambil seluruh ruang di sebelah kiri */
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        left: 0;  /* Menempatkan dropdown di sebelah kiri */
+    }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .content {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .content h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .places {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .place {
+    width: 30%;
+    text-align: center;
+    position: relative;
+}
+
+.place img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+
+        }
+        .places .place p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        .footer {
+            background-color: rgb(5, 159, 162);
+            padding: 20px;
+            text-align: center;
+        }
+        .footer h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .footer .holiday {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .footer .holiday i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .footer .holiday p {
+            font-size: 18px;
+        }
+        .footer .videos {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 20px;
+            padding-left: 30px;
+        }
+        .footer .videos .video {
+            width: 150%;
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .footer .videos .video img {
+            width: 100%;
+            height: auto;
+        }
+        .footer .social {
+            margin-top: 20px;
+        }
+        .footer .social i {
+            font-size: 24px;
+            margin: 0 10px;
+        }
+        .footer p {
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="#" class="active" onclick="showSection('home')">HOME</a>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">≡</a>
+            <div class="dropdown-content">
+                <a href="#" onclick="showSection('mountain')">Mountain</a>
+                <a href="#" onclick="showSection('forest')">Forest</a>
+                <a href="#" onclick="showSection('beach')">Beach</a>
+            </div>
+        </div>
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <i class="fas fa-search" onclick="toggleSearch()"></i>
+            <input type="text" id="searchInput" placeholder="Search..."/>
+        </div>
+    </div>
+
+    <div id="home" class="section active">
+        <div class="home-content">
+            <h1>EXPLORE NUSANTARA</h1>
+            <div class="slide active">
+                <p>Welcome! We offer a platform that provides travel recommendations from various regions in Indonesia, such as beaches, mountains, forests, and other natural wonders of the Nusantara. Whether you're seeking adventure, tranquility, or cultural experiences, we guide you to the hidden gems and popular destinations across the Nusantara.</p>
+            </div>
+        </div>
+    </div>
+    <div class="nav">
+        <!-- ... (existing nav items) ... -->
+        <a href="#" onclick="showSection('favorites')">Favorites</a>
+        <!-- ... (rest of nav) ... -->
+    </div>
+
+    <!-- ... (existing sections) ... -->
+
+    <div id="favorites" class="section">
+        <div class="content">
+            <h2>Your Favorites</h2>
+            <div id="favoritesList">
+                <!-- Favorite items will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="mountain" class="section">
+        <div class="content">
+            <h2>Mountain in East Nusantara</h2>
+            <div class="places">
+                <div class="place" data-name="Bromo">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.41.03_e73bcfb1.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Bromo) Area Gn. Bromo, Podokoyo, Kec. Tosari, Pasuruan, Jawa Timur</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Bromo')"></i>
+                </div>
+                <div class="place" data-name="Parahu">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.42.22_c5ab9b83.jpg" alt="Kali Dingin Waterfall"/>
+                    <p>(Parahu) Dataran Tinggi Dieng, Jawa Tengah</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Parahu')"></i>
+                </div>
+                <div class="place" data-name="Kawah ijen">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.45.33_5a8fc193.jpg" alt="Kali Dingin Waterfall"/>
+                    <p>(Kawah ijen) Kabupaten Banyuwangi & Bondowoso, Jawa Timur, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Kawah ijen')"></i>
+                </div>
+                <div class="place" data-name="Rinjani">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.48.44_333bc26e.jpg" alt="Kali Dingin Waterfall"/>
+                    <p>(Rinjani) Pulau Lombok, Nusa Tenggara Barat, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Rinjani')"></i>
+                </div>
+                <div class="place" data-name="Merbabu">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.51.37_c8a71dab.jpg" alt="Kali Dingin Waterfall"/>
+                    <p>(Merbabu)  Magelang, Boyolali, Semarang, Jawa Tengah, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Merbabu')"></i>
+                </div>
+                <div class="place" data-name="Jayawijaya">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.54.08_0e2f2024.jpg" alt="Kali Dingin Waterfall"/>
+                    <p>(Jayawijaya) Papua Tengah, Provinsi Papua Pegunungan, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Jayawijaya')"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="forest" class="section">
+        <div class="content">
+            <h2>Forest in Nusantara</h2>
+            <div class="places">
+                <div class="place" data-name="Pinus">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.01.32_1e717d9e.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Pinus) Jl raya Jl. Hutan Pinus Nganjir, Mangunan, Kec. Dlingo, Kabupaten Bantul, Daerah Istimewa Yogyakarta 55783</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Pinus')"></i>
+                </div>
+                <div class="place" data-name="Mangrove">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.02.57_cfb02025.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Mangrove) Karang Rejo, Tarakan Barat, Karang Rejo, Kec. Tarakan Bar., Kota Tarakan, Kalimantan Utara</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Mangrove')"></i>
+                </div>
+                <div class="place" data-name="Lindung Wehea">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.07.34_cb7dc691.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Lindung Wehea) Kabupaten Kutai Timur, Kalimantan Timur.</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Lindung Wehea')"></i>
+                </div>
+                <div class="place" data-name="Harapan">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.09.42_688b2f0c.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Harapan) Kabupaten Batanghari dan Kabupaten Sarolangun di Provinsi Jambi dan Kabupaten Musi Banyuasin, Provinsi Sumatera Selatan.</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Harapan')"></i>
+                </div>
+                <div class="place" data-name="Bukit Barisan Selatan">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.11.44_6f20445e.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Bukit Barisan Selatan) ujung utara (Aceh) sampai ujung selatan (Lampung), pulau Sumatra, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Bukit Barisan Selatan')"></i>
+                </div>
+                <div class="place" data-name="Alas Kethu">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 20.14.55_e8bb4952.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Alas Kethu) Area Tegalan, Giriwono, Kec. Wonogiri, Kabupaten Wonogiri, Jawa Tengah 57613</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Alas Kethu')"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="beach" class="section">
+        <div class="content">
+            <h2>Beach in Nusantara</h2>
+            <div class="places">
+                <div class="place" data-name="Pantai Ora">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.11_63d50790.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Ora) Pulau Seram, kecamatan Seram Utara, Maluku Tengah, Maluku, Indonesia</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Pantai Ora')"></i>
+                </div>
+                <div class="place" data-name="Pink Beach">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.10_43c898e9.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Pink Beach) Taman Nasional Komodo di Flores Barat, Nusa Tenggara Timur.</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Pink Beach')"></i>
+                </div>
+                <div class="place" data-name="Gigi Hiu">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.11_78b015e2.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Gigi Hiu) Pekon Susuk, Kec. Kelumbayan, Kabupaten Tanggamus, Lampung.</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Gigi Hiu')"></i>
+                </div>
+                <div class="place" data-name="Telawas">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.11_1527050d.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Telawas) Lombok Tengah, Nusa Tenggara Barat.</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Telawas')"></i>
+                </div>
+                <div class="place" data-name="Kuyon">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.12_37c0e0e2.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Kuyon) Nglumpang, Nglebeng, Kec. Panggul, Kabupaten Trenggalek, Jawa Timur 66364</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Kuyon')"></i>
+                </div>
+                <div class="place" data-name="Ngalur">
+                    <img src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\WhatsApp Image 2024-10-10 at 19.36.11_52dccd9b.jpg" alt="Mata Buntu Waterfall"/>
+                    <p>(Ngalur) Area Pegunungan, Jengglungharjo, Kec. Tanggunggunung, Kabupaten Tulungagung, Jawa Timur 66283</p>
+                    <i class="fas fa-heart favorite-icon" onclick="toggleFavorite('Ngalur')"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="footer">
+        <h2>Discover your favorite locations with Explore Nusantara!</h2>
+        <div class="holiday">
+            <i class="fas fa-play-circle"></i>
+            <p>Enjoy Your Holiday</p>
+        </div>
+        <p>Good vibes, great adventures!</p>
+        <div class="videos">
+            <div class="video">
+                <video  controls>
+                    <source src="C:\Users\arieq\Documents\SEMESTER 3\PEMROGRAMAN WEBSITE\videoplayback.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        
+        <div class="social">
+            <a href="https://youtube.com/@explorenusantaraidn?si=Qn8IUbbBpVHn1_3Z">
+            <i class="fab fa-youtube"></i> </a>
+            <a href="https://www.instagram.com/explorenusantaraidn/profilecard/?igsh=NXkzdGR5ZXhhOW9l">
+            <i class="fab fa-instagram"></i> </a>
+        </div>
+        <p>©2024 | Explore Nusantara </p>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        // Initialize the first slide
+        showSlide(0);
+    </script>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Search bar toggle functionality
+        function toggleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.classList.toggle('active');
+        }
+
+        function search() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(query)) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+
+        // Event listener for the search input to trigger search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+
+        // ... (existing JavaScript functions) ...
+        
+        function toggleFavorite(placeName) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const placeIndex = favorites.indexOf(placeName);
+        
+            if (placeIndex === -1) {
+                favorites.push(placeName);
+            } else {
+                favorites.splice(placeIndex, 1);
+            }
+        
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoriteIcons();
+            updateFavoritesList();
+        }
+        
+        function updateFavoriteIcons() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const icons = document.querySelectorAll('.favorite-icon');
+        
+            icons.forEach(icon => {
+                const placeName = icon.closest('.place').getAttribute('data-name');
+                if (favorites.includes(placeName)) {
+                    icon.classList.add('active');
+                } else {
+                    icon.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateFavoritesList() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const favoritesList = document.getElementById('favoritesList');
+            favoritesList.innerHTML = '';
+        
+            favorites.forEach(placeName => {
+                const placeElement = document.querySelector(`.place[data-name="${placeName}"]`);
+                if (placeElement) {
+                    const img = placeElement.querySelector('img').src;
+                    const description = placeElement.querySelector('p').textContent;
+        
+                    const favoriteItem = document.createElement('div');
+                    favoriteItem.className = 'favorite-item';
+                    favoriteItem.innerHTML = `
+                        <img src="${img}" alt="${placeName}">
+                        <h3>${placeName}</h3>
+                        <p>${description}</p>
+                        <button onclick="toggleFavorite('${placeName}')">Remove from Favorites</button>
+                    `;
+        
+                    favoritesList.appendChild(favoriteItem);
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFavoriteIcons();
+            updateFavoritesList();
+        });
+    </script>
+    
+
+    
+</body>
+</html>
